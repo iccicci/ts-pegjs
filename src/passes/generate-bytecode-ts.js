@@ -319,6 +319,11 @@ function generateBytecode(ast) {
         "peg$otherExpectation(\"" + js.stringEscape(node.name) + "\")"
       );
 
+      if(node.verbose) return buildSequence(
+        generate(node.expression, context),
+        buildCondition([op.IF_ERROR], [op.FAIL, nameIndex], [])
+      );
+
       // The code generated below is slightly suboptimal because |FAIL| pushes
       // to the stack, so we need to stick a |POP| in front of it. We lack a
       // dedicated instruction that would just report the failure and not touch
